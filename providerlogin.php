@@ -22,7 +22,7 @@ else
 }
 $contactemail = $_GET["contactemail"];
 $password = $_GET["password"];
-$qrystr = "select id,name,contactemail,contactphone,address1,address2,city,zip from provider where contactemail='".$contactemail."' and password='".$password."'";
+$qrystr = "select id,name,providertype,contactemail,contactphone,address1,address2,city,zip from provider where contactemail='".$contactemail."' and password='".$password."'";
 $res = $mysqli->query($qrystr);
 if ( $res && $res->num_rows > 0 )
 {
@@ -38,14 +38,14 @@ if ( $res && $res->num_rows > 0 )
   $zip=$row[8];
 
   include("providerheader.php");
-  $options = array("Family Practice", "Internal Medicine", "OBGYN", "Osteopathic Medicine", "Pharmacist", "Plastic Surgeon", "Psychiatry");
+$options = array("Family Practice", "Internal Medicine", "OBGYN", "Osteopathic Medicine", "Pharmacist", "Registered Dietitian", "Wellness Coach", "Fitness Coach", "Plastic Surgeon", "Psychiatry", "Dentist", "Hematology", "Cardiology", "Endocrinology", "Sports Medicine", "Chiropractic", "Oncology", "Orthopedic Surgeon", "Chinese Medicine", "Orthopedic Surgeon", "Naturopathic", "Ophthalmology", "Other");
   $form = new Form("Provider Account Settings");
   $form->configure(array("action" => "updateprovideraccountsettings.php", "method" => "get"));
   $form->addElement(new Element\HTML("<img src='Nutriligence.png'><h1>Provider Account Settings</h1>"));
   $form->addElement(new Element\Hidden("providerid", $providerid));
   $form->addElement(new Element\Hidden("password", $password));
   $form->addElement(new Element\TextBox("Name:", "name", array("readonly" => true, "value" => $name)));
-  $form->addElement(new Element\Select("Provider Type:", "providertype", $options, array("value"=>$providertype));
+  $form->addElement(new Element\Select("Provider Type:", "providertype", $options, array("value"=>$providertype)));
   $form->addElement(new Element\TextBox("Contact Email:", "contactemail", array("readonly" => true, "value" => $contactemail)));
   $form->addElement(new Element\TextBox("Contact Phone:", "contactphone", array("value" => $contactphone)));
   $form->addElement(new Element\TextBox("Address1:", "address1", array("value" => $address1)));
