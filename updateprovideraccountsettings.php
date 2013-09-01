@@ -14,10 +14,11 @@ else
 {
 //  echo "Connection was OK!\n";
 }
+$contactemail = $_GET["contactemail"];
+$password = $_GET["password"];
 $providerid = $_GET["providerid"];
 $name = $_GET["name"];
 $providertype = $_GET["providertype"];
-$contactemail = $_GET["contactemail"];
 $contactphone = $_GET["contactphone"];
 $address1 = $_GET["address1"];
 $address2 = $_GET["address2"];
