@@ -20,7 +20,7 @@ else
 {
 //  echo "Connection was OK!\n";
 }
-$options = array("Family Practice", "Internal Medicine", "OBGYN", "Osteopathic Medicine", "Pharmacist", "Plastic Surgeon", "Psychiatry");
+$options = array("Family Practice", "Internal Medicine", "OBGYN", "Osteopathic Medicine", "Pharmacist", "Registered Dietitian", "Wellness Coach", "Fitness Coach", "Plastic Surgeon", "Psychiatry", "Dentist", "Hematology", "Cardiology", "Endocrinology", "Sports Medicine", "Chiropractic", "Oncology", "Orthopedic Surgeon", "Chinese Medicine", "Orthopedic Surgeon", "Naturopathic", "Ophthalmology", "Other");
 $form = new Form("Create Provider Account");
 $form->configure(array("action" => "createprovider.php", "method" => "get"));
 $form->addElement(new Element\HTML("<img src='Nutriligence.png'><h1>Add a Screening Provider</h1>"));
