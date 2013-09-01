@@ -22,7 +22,7 @@ else
 }
 $userid=$_GET["userid"];
 $usertestsid = $_GET["usertestsid"];
-$qrystr = "select firstname,lastname,email,bmi,weight from user where id=".$userid;
+$qrystr = "select firstname,lastname,email,yearofbirth,gender from user where id=".$userid;
 echo $qrystr;
 $res = $mysqli->query($qrystr);
 if ( $res && $res->num_rows > 0 )
@@ -31,35 +31,40 @@ if ( $res && $res->num_rows > 0 )
   $firstname=$row[0];
   $lastname=$row[1];
   $email=$row[2];
-  $bmi=$row[3];
-  $weight=$row[4];
+  $yearofbirth=$row[3];
+  $age = 2013-intval($yearofbirth);
+  $gender=$row[4];
 
   include("customerheader.php");
 
   $form = new Form("Custome Information");
-  $form->configure(array("action" => "updatecustomer.php", "method" => "get"));
+  $form->configure(array("action" => "showhistory.php", "method" => "get"));
   $form->addElement(new Element\HTML("<img src='Nutriligence.png'><h1>Customer Information</h1>"));
   $form->addElement(new Element\Hidden("userid", $userid));
   $form->addElement(new Element\Hidden("usertestsid", $usertestsid));
   $form->addElement(new Element\TextBox("Email: ", "email", array("readonly"=>true, "value" => $email)));
-  $form->addElement(new Element\TextBox("First Name: ", "firstname", array("readonly"=>true, "value" => $firstname)));
-  $form->addElement(new Element\TextBox("Last Name: ", "lastname", array("readonly"=>true, "value" => $lastname)));
-  $form->addElement(new Element\TextBox("BMI: ", "bmi", array("value" => $bmi)));
-  $form->addElement(new Element\TextBox("Weight: ", "weight", array("value" => $weight)));
-  $qrystr2 = "select score,taken, details,recommendation from usertests where id=".$usertestsid;
+  $form->addElement(new Element\TextBox("Name: ", "name", array("readonly"=>true, "value" => $lastname.", ".$firstname)));
+   $form->addElement(new Element\TextBox("Age: ", "age", array("readonly"=>true, "value" => $age)));
+  $form->addElement(new Element\TextBox("Gender: ", "gender", array("readonly"=>true, "value" => $gender)));
+  $qrystr2 = "select score,taken,bmi,weight,details,recommendation from usertests where id=".$usertestsid;
   $res2 = $mysqli->query($qrystr2);
   if ( $res2 && $res2->num_rows > 0 )
   {
       $row = $res2->fetch_row();
       $score = $row[0];
       $taken = $row[1];
-      $details = $row[2];
-      $recommendation = $row[3];
-      $form->addElement(new Element\HTML("    Score: ".$score." Taken on: ".substr($taken,0,10)." at ".substr($taken,11,8)."<p>")); 
+      $bmi = $row[2];
+      $weight = $row[3];
+      $details = $row[4];
+      $recommendation = $row[5];
+      $form->addElement(new Element\TextBox("Score: ", "score", array("readonly"=>true, "value" => $score)));
+      $form->addElement(new Element\TextBox(" Taken on:", "taken", array("readonly"=>true, "value" => $taken)));
+      $form->addElement(new Element\TextBox(" BMI:", "bmi", array("readonly"=>true, "value" => $bmi)));
+      $form->addElement(new Element\TextBox(" Weight:", "weight", array("readonly"=>true, "value" => $weight)));
       $form->addElement(new Element\TextArea("Details: ", "details", array("readonly"=>true, "value" => $details)));
       $form->addElement(new Element\TextArea("Recommendation: ", "recommendation", array("readonly"=>true, "value" => $recommendation)));
   }
-  $form->addElement(new Element\Button("Submit"));
+  $form->addElement(new Element\Button("History"));
   
   $form->render();
 
