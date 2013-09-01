@@ -38,8 +38,8 @@ if ( $res && $res->num_rows > 0 )
   $zip=$row[8];
 
   include("providerheader.php");
+ $options = array("Family Practice", "Internal Medicine", "OBGYN", "Osteopathic Medicine", "Pharmacist", "Registered Dietitian", "Wellness Coach", "Fitness Coach", "Plastic Surgeon", "Psychiatry", "Dentist", "Hematology", "Cardiology", "Endocrinology", "Sports Medicine", "Chiropractic", "Oncology", "Orthopedic Surgeon", "Chinese Medicine", "Orthopedic Surgeon", "Naturopathic", "Ophthalmology", "Other");
   $form = new Form("Provider Account Settings");
-  $options = array("Family Practice", "Internal Medicine", "OBGYN", "Osteopathic Medicine", "Pharmacist", "Plastic Surgeon", "Psychiatry");
   $form->configure(array("action" => "updateprovideraccountsettings.php", "method" => "get"));
   $form->addElement(new Element\HTML("<img src='Nutriligence.png'><h1>Provider Account Settings</h1>"));
   $form->addElement(new Element\Hidden("providerid", $providerid));
