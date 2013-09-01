@@ -22,6 +22,8 @@ else
 }
 $contactemail=$_GET["contactemail"];
 $password=$_GET["password"];
+$_SESSION["contactemail"] = $contactemail;
+$_SESSION["password"] = $password;
 $qrystr = "select id,name,contactemail,contactphone,address1,address2,city,zip from provider where contactemail='".$contactemail."' and password='".$password."'";
 $res = $mysqli->query($qrystr);
 if ( $res && $res->num_rows > 0 )
@@ -35,30 +37,58 @@ if ( $res && $res->num_rows > 0 )
   $address2=$row[5];
   $city=$row[6];
   $zip=$row[7];
-
+ 
   include("providerheader.php");
-  if ( !isset($email) )
+  if ( !isset($_GET["email"]) || strlen($_GET["email"]) == 0 )
   {
     $email = "";
+    $semail = ".*";
   }
-  if ( !isset($firstname) )
+  else
+  {
+    $semail = $email = $_GET["email"];
+  }
+  if ( !isset($_GET["firstname"]) || strlen($_GET["firstname"]) == 0 )
   {
     $firstname = "";
+    $sfirstname = ".*";
   }
-  if ( !isset($lastname) )
+  else
+  {
+    $sfirstname = $firstname = $_GET["firstname"];
+  }
+  if ( !isset($_GET["lastname"]) || strlen($_GET["lastname"]) == 0 )
   {
     $lastname = "";
+    $slastname = ".*";
+  }
+  else
+  {
+    $slastname = $lastname = $_GET["lastname"];
+  }
+  if ( !isset($_GET["scancode"]) || strlen($_GET["scancode"]) == 0 )
+  {
+    $scancode = "";
+    $sscancode = ".*";
+  }
+  else
+  {
+    $scancode = $scancode = $_GET["scancode"];
   }
   $form = new Form("Customer Information");
   $form->configure(array("action" => "createcustomer.php", "method" => "get"));
   $form->addElement(new Element\HTML("<img src='Nutriligence.png'><h1>Customers</h1>"));
   $form->addElement(new Element\Radio("Customer Type", "customertype", array("Individual", "Employee"), array("value"=>"Individual")));
   $form->addElement(new Element\Hidden("providerid", $providerid));
+  $form->addElement(new Element\Hidden("contactemail", $contactemail));
+  $form->addElement(new Element\Hidden("password", $password));
   $form->addElement(new Element\TextBox("Email: ", "email", array("value" => $email)));
   $form->addElement(new Element\TextBox("First Name: ", "firstname", array("value" => $firstname)));
   $form->addElement(new Element\TextBox("Last Name: ", "lastname", array("value" => $lastname)));
-  $form->addElement(new Element\Button("Create Customer"));
-  
+  $form->addElement(new Element\TextBox("Scan code: ", "scancode", array("value" => $scancode)));
+  $form->addElement(new Element\Button("Create Customer", "submit", array("name" => "create")));
+  $form->addElement(new Element\Button("Search Customer", "submit", array("formaction" => "customer.php")));
+
   $form->render();
 
 echo "<table id=\"table0\" width=\"700\" border=\"1\">\n";
@@ -77,7 +107,8 @@ echo "    <th width=\"100\" scope=\"col\">Last Scan On</th>\n";
 echo "    <th width=\"100\" scope=\"col\">View Details</th>\n";
 echo "    <th width=\"100\" scope=\"col\">Scan Again</th>\n";
 echo "  </tr>\n";
-$qrystr = "select id,firstname,lastname,email,customertype,status from user where providerid=".$providerid;
+$qrystr = "select id,firstname,lastname,email,customertype,status from user where providerid=".$providerid." and firstname regexp '".$sfirstname."' and lastname regexp '".$slastname."' and email regexp '".$semail."' and scancode regexp '".$sscancode."'";
+echo $qrystr;
 $res = $mysqli->query($qrystr);
 if ( $res && $res->num_rows >= 0 )
 {
@@ -105,7 +136,6 @@ if ( $res && $res->num_rows >= 0 )
     {
       $usertestsid = $res2->fetch_row()[0];
       echo "    <td>".substr($res2->fetch_row()[1],0, 10)."</td>\n";
-      echo "    <td><a href='viewdetails.php?userid=".$id."&usertestsid=".$usertestsid."'>View Details</a></td>\n";
     }
     else
     {
@@ -113,7 +143,7 @@ if ( $res && $res->num_rows >= 0 )
       echo "     <td>Not Done</td>\n";
       echo "     <td></td>\n";
     }
-    echo "    <td><a href='viewdetails.php?userid=".$id."'>View Details</a></td>\n";
+    echo "    <td><a href='viewdetails.php?userid=".$id."&usertestsid=".$usertestsid."'>View Details</a></td>\n";
     echo "    <td><a href='scanagain.php?userid=".$id."'>Scan Again</a></td>\n";
     echo "  </tr>\n";
     $num_rows = $num_rows-1;
