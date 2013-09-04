@@ -73,7 +73,7 @@ if ( $res && $res->num_rows > 0 )
   }
   else
   {
-    $scancode = $scancode = $_GET["scancode"];
+    $sscancode = $scancode = $_GET["scancode"];
   }
   $form = new Form("Customer Information");
   $form->configure(array("action" => "createcustomer.php", "method" => "get"));
@@ -135,16 +135,17 @@ if ( $res && $res->num_rows >= 0 )
     if ( $res2 && $res2->num_rows > 0 )
     {
       $usertestsid = $res2->fetch_row()[0];
-      echo "    <td>".substr($res2->fetch_row()[1],0, 10)."</td>\n";
+      $taken = $res2->fetch_row()[1];
+      echo $taken;
+      echo "    <td>".substr($taken,0, 10)."</td>\n";
     }
     else
     {
       $usertestsid = 0;
       echo "     <td>Not Done</td>\n";
-      echo "     <td></td>\n";
     }
     echo "    <td><a href='viewdetails.php?userid=".$id."&usertestsid=".$usertestsid."'>View Details</a></td>\n";
-    echo "    <td><a href='scanagain.php?userid=".$id."'>Scan Again</a></td>\n";
+    echo "    <td><a href='assesscustomer.php?userid=".$id."&usertestsid=".$usertestsid."'>Screen Again</a></td>\n";
     echo "  </tr>\n";
     $num_rows = $num_rows-1;
   }
