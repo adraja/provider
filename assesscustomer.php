@@ -22,7 +22,7 @@ else
 }
 $userid=$_GET["userid"];
 $usertestsid = $_GET["usertestsid"];
-$qrystr = "select firstname,lastname,email from user where id=".$userid;
+$qrystr = "select firstname,lastname,email,scancode from user where id=".$userid;
 $res = $mysqli->query($qrystr);
 if ( $res && $res->num_rows > 0 )
 {
@@ -30,7 +30,7 @@ if ( $res && $res->num_rows > 0 )
   $firstname=$row[0];
   $lastname=$row[1];
   $email=$row[2];
-
+  $scancode = $row[3];
   include("customerheader.php");
 
   $form = new Form("Screening Information");
@@ -39,6 +39,7 @@ if ( $res && $res->num_rows > 0 )
   $form->addElement(new Element\Hidden("userid", $userid));
   $form->addElement(new Element\Hidden("usertestsid", $usertestsid));
   $form->addElement(new Element\TextBox("Email: ", "email", array("readonly"=>true, "value" => $email)));
+  $form->addElement(new Element\TextBox("Scan Code: ", "scancode", array("readonly"=>true, "value" => $scancode)));
   $qrystr2 = "select score,taken,bmi,weight,details,recommendation from usertests where id=".$usertestsid;
   $res2 = $mysqli->query($qrystr2);
   if ( $res2 && $res2->num_rows > 0 )
@@ -50,12 +51,22 @@ if ( $res && $res->num_rows > 0 )
       $weight = $row[3];
       $details = $row[4];
       $recommendation = $row[5];
+   }
+   else
+   {
+      $score = 18000;
+      $taken = "";
+      $bmi = 25.0;
+      $weight = 100;
+      $details = "";
+      $recommendation = "";
+   }
       $form->addElement(new Element\TextBox("Score: ", "score", array("value" => $score)));
+      $form->addElement(new Element\TextBox("Taken: ", "taken", array("value" => substr($taken,0,10))));
       $form->addElement(new Element\TextBox("BMI: ", "bmi", array("value" => $bmi)));
       $form->addElement(new Element\TextBox("Weight: ", "weight", array("value" => $weight)));
       $form->addElement(new Element\TextArea("Details: ", "details", array("value" => $details)));
       $form->addElement(new Element\TextArea("Recommendation: ", "recommendation", array("value" => $recommendation)));
-  }
   $form->addElement(new Element\Button("Submit"));
   $form->render();
   echo "<table id=\"table0\" width=\"700\" border=\"1\">\n";
