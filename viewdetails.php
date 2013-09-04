@@ -39,7 +39,7 @@ if ( $res && $res->num_rows > 0 )
   include("customerheader.php");
 
   $form = new Form("Custome Information");
-  $form->configure(array("action" => "showhistory.php", "method" => "get"));
+  $form->configure(array("action" => "customerhistory.php", "method" => "get"));
   $form->addElement(new Element\HTML("<img src='Nutriligence.png'><h1>Customer Information</h1>"));
   $form->addElement(new Element\Hidden("userid", $userid));
   $form->addElement(new Element\Hidden("usertestsid", $usertestsid));
