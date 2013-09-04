@@ -22,7 +22,7 @@ else
 }
 $userid=$_GET["userid"];
 $usertestsid = $_GET["usertestsid"];
-$qrystr = "select firstname,lastname,email,yearofbirth,gender from user where id=".$userid;
+$qrystr = "select firstname,lastname,email,scancode,yearofbirth,gender from user where id=".$userid;
 echo $qrystr;
 $res = $mysqli->query($qrystr);
 if ( $res && $res->num_rows > 0 )
@@ -31,9 +31,10 @@ if ( $res && $res->num_rows > 0 )
   $firstname=$row[0];
   $lastname=$row[1];
   $email=$row[2];
-  $yearofbirth=$row[3];
+  $scancode=$row[3];
+  $yearofbirth=$row[4];
   $age = 2013-intval($yearofbirth);
-  $gender=$row[4];
+  $gender=$row[5];
 
   include("customerheader.php");
 
@@ -43,6 +44,7 @@ if ( $res && $res->num_rows > 0 )
   $form->addElement(new Element\Hidden("userid", $userid));
   $form->addElement(new Element\Hidden("usertestsid", $usertestsid));
   $form->addElement(new Element\TextBox("Email: ", "email", array("readonly"=>true, "value" => $email)));
+  $form->addElement(new Element\TextBox("Scan Code: ", "scancode", array("readonly"=>true, "value" => $scancode)));
   $form->addElement(new Element\TextBox("Name: ", "name", array("readonly"=>true, "value" => $lastname.", ".$firstname)));
    $form->addElement(new Element\TextBox("Age: ", "age", array("readonly"=>true, "value" => $age)));
   $form->addElement(new Element\TextBox("Gender: ", "gender", array("readonly"=>true, "value" => $gender)));
